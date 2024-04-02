@@ -54,42 +54,54 @@ export const getFavRoutines = async (req: AuthRequest, res: Response, next: Next
     }
 }
 
-// export const addFavExercise = async (req: AuthRequest, res: Response, next: NextFunction) => {
-//     try {
-//         const exercise = await usersRepository.addToExercises(req.body);
-//         return res.status(201).json(exercise);
-//     } 
-//     catch (error: any) {
-//         return next(error);
-//     }
-// }
+export const addFavExercise = async (req: AuthRequest, res: Response, next: NextFunction) => {
+    try {
+        if(!req.userId){
+            return res.status(401).json({message: "unauthorized"})
+        }
+        const exercise = await usersRepository.addToExercises(req.userId, req.body);
+        return res.status(201).json(exercise);
+    } 
+    catch (error: any) {
+        return next(error);
+    }
+}
 
-// export const addFavRoutine = async (req: AuthRequest, res: Response, next: NextFunction) => {
-//     try {
-//         const routine = await usersRepository.addToRoutines(req.body);
-//         return res.status(201).json(routine);
-//     } 
-//     catch (error: any) {
-//         return next(error);
-//     }
-// }
+export const addFavRoutine = async (req: AuthRequest, res: Response, next: NextFunction) => {
+    try {
+        if(!req.userId){
+            return res.status(401).json({message: "unauthorized"})
+        }
+        const routine = await usersRepository.addToRoutines(req.userId, req.body);
+        return res.status(201).json(routine);
+    } 
+    catch (error: any) {
+        return next(error);
+    }
+}
 
-// export const deleteFavExercise = async (req: AuthRequest, res: Response, next: NextFunction) => {
-//     try {
-//         const exercise = await usersRepository.deleteFromExercises(req.body);
-//         return res.status(201).json(exercise);
-//     } 
-//     catch (error: any) {
-//         return next(error);
-//     }
-// }
+export const deleteFavExercise = async (req: AuthRequest, res: Response, next: NextFunction) => {
+    try {
+        if(!req.userId){
+            return res.status(401).json({message: "unauthorized"})
+        }
+        const exercise = await usersRepository.deleteFromExercises(req.userId, req.body);
+        return res.status(201).json(exercise);
+    } 
+    catch (error: any) {
+        return next(error);
+    }
+}
 
-// export const deleteFavRoutine = async (req: AuthRequest, res: Response, next: NextFunction) => {
-//     try {
-//         const routine = await usersRepository.deleteFromRoutines(req.body);
-//         return res.status(201).json(routine);
-//     } 
-//     catch (error: any) {
-//         return next(error);
-//     }
-// }
+export const deleteFavRoutine = async (req: AuthRequest, res: Response, next: NextFunction) => {
+    try {
+        if(!req.userId){
+            return res.status(401).json({message: "unauthorized"})
+        }
+        const routine = await usersRepository.deleteFromRoutines(req.userId, req.body);
+        return res.status(201).json(routine);
+    } 
+    catch (error: any) {
+        return next(error);
+    }
+}
