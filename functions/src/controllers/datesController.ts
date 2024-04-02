@@ -19,7 +19,7 @@ export const getAllDates = async (
   }
 };
 
-export const getAllRountinesforDate = async (
+export const getAllRoutinesforDate = async (
   req: AuthRequest,
   res: Response,
   next: NextFunction

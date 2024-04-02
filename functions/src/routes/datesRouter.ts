@@ -15,7 +15,7 @@ datesRouter.get(
 datesRouter.get(
   "/users/:userId/dates/:date/routines",
   firebaseAuthMiddleware,
-  datesController.getAllRountinesforDate
+  datesController.getAllRoutinesforDate
 );
 
 // //creating new date
