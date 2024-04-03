@@ -38,12 +38,12 @@ export const addToRoutines = async (uId:string, routine: Routines) => {
     await client.db().collection<User>(DOCUMENTS.USERS).updateOne({ uId: uId }, {$push: {"favRoutines": routine}})
 }
 
-export const deleteFromExercises = async (uId:string, exercise: ExerciseWithoutSet) => {
+export const deleteFromExercises = async (uId:string, exercise: string) => {
     const client = await MongoDBConnection.getClient()
     await client.db().collection<User>(DOCUMENTS.USERS).updateOne({ uId: uId }, {$pull: {"favExercises": {name: exercise}}})
 }
 
-export const deleteFromRoutines = async (uId:string, routine: Routines) => {
+export const deleteFromRoutines = async (uId:string, routine: string) => {
     const client = await MongoDBConnection.getClient()
-    await client.db().collection<User>(DOCUMENTS.USERS).updateOne({ uId: uId }, {$pull: {"favExercises": {name: routine}}})
+    await client.db().collection<User>(DOCUMENTS.USERS).updateOne({ uId: uId }, {$pull: {"favRoutines": {routineName: routine}}})
 }
