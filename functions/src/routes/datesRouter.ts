@@ -5,36 +5,32 @@ import { firebaseAuthMiddleware } from "../middleware/firebaseAuthMiddleware";
 const datesRouter = express.Router();
 
 //Get all dates for each user
-datesRouter.get(
-  "/users/:userId/dates",
-  firebaseAuthMiddleware,
-  datesController.getAllDates
-);
+datesRouter.get("/dates", firebaseAuthMiddleware, datesController.getAllDates);
 
-//Get all routines for date
-datesRouter.get(
-  "/users/:userId/dates/:date/routines",
-  firebaseAuthMiddleware,
-  datesController.getAllRoutinesforDate
-);
+// Get all routines for date
+// datesRouter.get(
+//   "/dates/:date/routines",
+//   firebaseAuthMiddleware,
+//   datesController.getAllRoutinesforDate
+// );
 
 // //creating new date
 datesRouter.post(
-  "/users/:userId/dates/:date",
+  "/dates/",
   firebaseAuthMiddleware,
   datesController.addDateToUser
 );
 
 // //edit date
 datesRouter.patch(
-  "/users/:userId/dates/:date",
+  "/dates/:id",
   firebaseAuthMiddleware,
   datesController.editDate
 );
 
 // //delete date
 datesRouter.delete(
-  "/users/:userId/dates/:date",
+  "/dates/:id",
   firebaseAuthMiddleware,
   datesController.deleteDate
 );
