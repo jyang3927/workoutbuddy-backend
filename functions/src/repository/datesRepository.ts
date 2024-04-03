@@ -9,7 +9,37 @@ export const findAllDates = async (uId: string): Promise<Date[]> => {
   const dates = await datesCollection.find({ uId: uId }).toArray();
   return dates;
 };
-
+export const findDatesByMonth = async (
+  uId: string,
+  month: number,
+  year: number
+): Promise<Date[]> => {
+  const client = await MongoDBConnection.getClient();
+  const collection = client.db().collection<Date>(DOCUMENTS.DATE);
+  // Aggregation pipeline to filter by user ID, month, and year
+  const pipeline = [
+    {
+      $addFields: {
+        // Convert the date string to a date object
+        convertedDate: { $dateFromString: { dateString: "$date" } },
+      },
+    },
+    {
+      $match: {
+        uId: uId, // Filter by user ID
+        // Use MongoDB's date aggregation operators to filter by month and year
+        $expr: {
+          $and: [
+            { $eq: [{ $month: "$convertedDate" }, month] },
+            { $eq: [{ $year: "$convertedDate" }, year] },
+          ],
+        },
+      },
+    },
+  ];
+  const records = (await collection.aggregate(pipeline).toArray()) as Date[];
+  return records;
+};
 export const findRoutinesForDate = async (
   userId: string,
   dateStr: string
@@ -23,7 +53,7 @@ export const findRoutinesForDate = async (
 export const addDate = async (
   userId: string,
   dateStr: string,
-  routines = [],
+  routines: Routines[],
   workedOut: boolean = false
 ): Promise<Date> => {
   const client = await MongoDBConnection.getClient();
@@ -37,7 +67,7 @@ export const addDate = async (
   try {
     await datesCollection.insertOne(newDate);
     return newDate;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Failed to add new date:", error);
     throw new Error("Failed to add new date.");
   }

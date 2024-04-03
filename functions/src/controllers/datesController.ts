@@ -9,10 +9,17 @@ export const getAllDates = async (
 ) => {
   try {
     const userId = req.user?.uid;
-    if(!userId){
-        return res.status(400).send("Unauthorized");
+    if (!userId) {
+      return res.status(400).send("Unauthorized");
     }
-    const results = await datesRepository.findAllDates(userId);
+    const month = req.query.month ? parseInt(req.query.month as string) : null;
+    const year = req.query.year ? parseInt(req.query.year as string) : null;
+    let results;
+    if (month && year) {
+      results = await datesRepository.findDatesByMonth(userId, month, year);
+    } else {
+      results = await datesRepository.findAllDates(userId);
+    }
     return res.status(200).json(results);
   } catch (error: any) {
     return next(error);
@@ -26,9 +33,9 @@ export const getAllRoutinesforDate = async (
 ) => {
   try {
     const userId = req.user?.uid;
-        if(!userId){
-            return res.status(400).send("Unauthorized");
-        }
+    if (!userId) {
+      return res.status(400).send("Unauthorized");
+    }
     const results = await datesRepository.findRoutinesForDate(
       userId,
       req.params.date
@@ -46,9 +53,9 @@ export const addDateToUser = async (
 ) => {
   try {
     const userId = req.user?.uid;
-        if(!userId){
-            return res.status(400).send("Unauthorized");
-        }
+    if (!userId) {
+      return res.status(400).send("Unauthorized");
+    }
 
     const { date, routines, workedOut } = req.body;
     if (!date) {
@@ -109,7 +116,7 @@ export const deleteDate = async (
     await datesRepository.deleteDate(userId, date);
 
     return res.status(200).json({ message: "Date deleted successfully." });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error deleting date:", error);
     return next(error);
   }
