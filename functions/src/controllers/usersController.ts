@@ -98,7 +98,7 @@ export const deleteFavExercise = async (req: AuthRequest, res: Response, next: N
         if(!userId){
             return res.status(400).send("Unauthorized");
         }
-        const exercise = await usersRepository.deleteFromExercises(userId, req.body);
+        const exercise = await usersRepository.deleteFromExercises(userId, req.params.exercise);
         return res.status(201).json(exercise);
     } 
     catch (error: any) {
@@ -112,7 +112,7 @@ export const deleteFavRoutine = async (req: AuthRequest, res: Response, next: Ne
         if(!userId){
             return res.status(400).send("Unauthorized");
         }
-        const routine = await usersRepository.deleteFromRoutines(userId, req.body);
+        const routine = await usersRepository.deleteFromRoutines(userId, req.params.routine);
         return res.status(201).json(routine);
     } 
     catch (error: any) {
