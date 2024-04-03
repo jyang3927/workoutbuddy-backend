@@ -1,14 +1,16 @@
 import { Response, NextFunction } from "express";
 import * as usersRepository from '../repository/usersRepository'; 
 import { AuthRequest } from "../models/AuthRequest";
+import User from "../models/User";
 
 //use AuthRequest to make sure user is logged in and authorized 
 export const getUser = async(req: AuthRequest, res: Response, next: NextFunction) => {
     try{
-        if(!req.userId){
-            return res.status(401).json({message: "unauthorized"})
+        const userId = req.user?.uid;
+        if(!userId){
+            return res.status(400).send("Unauthorized");
         }
-        const results = await usersRepository.findUserById(req.userId); 
+        const results = await usersRepository.findUserById(userId); 
         return res.status(200).json(results); 
     }
     catch(error: any){
@@ -18,8 +20,14 @@ export const getUser = async(req: AuthRequest, res: Response, next: NextFunction
 
 export const addUser = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
-        const user = await usersRepository.insertUser(req.body);
-        return res.status(201).json(user);
+        const userId = req.user?.uid;
+        if(!userId){
+            return res.status(400).send("Unauthorized");
+        }
+        const user = req.body as User;
+        user.uId = userId
+        const result = await usersRepository.insertUser(user);
+        return res.status(201).json(result);
     } 
     catch (error: any) {
         return next(error);
@@ -28,11 +36,12 @@ export const addUser = async (req: AuthRequest, res: Response, next: NextFunctio
 
 export const getFavExercises = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try{
-        if(!req.userId){
-            return res.status(401).json({message: "unauthorized"})
+        const userId = req.user?.uid;
+        if(!userId){
+            return res.status(400).send("Unauthorized");
         }
-        //unsure if req.UserID is what we want in there
-        const results = await usersRepository.findAllExercises(req.userId); 
+        //unsure if userId is what we want in there
+        const results = await usersRepository.findAllExercises(userId); 
         return res.status(200).json(results); 
     }
     catch(error: any){
@@ -42,11 +51,12 @@ export const getFavExercises = async (req: AuthRequest, res: Response, next: Nex
 
 export const getFavRoutines = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try{
-        if(!req.userId){
-            return res.status(401).json({message: "unauthorized"})
+        const userId = req.user?.uid;
+        if(!userId){
+            return res.status(400).send("Unauthorized");
         }
-        //unsure if req.UserID is what we want in there
-        const results = await usersRepository.findAllRoutines(req.userId); 
+        //unsure if userId is what we want in there
+        const results = await usersRepository.findAllRoutines(userId); 
         return res.status(200).json(results); 
     }
     catch(error: any){
@@ -56,10 +66,11 @@ export const getFavRoutines = async (req: AuthRequest, res: Response, next: Next
 
 export const addFavExercise = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
-        if(!req.userId){
-            return res.status(401).json({message: "unauthorized"})
+        const userId = req.user?.uid;
+        if(!userId){
+            return res.status(400).send("Unauthorized");
         }
-        const exercise = await usersRepository.addToExercises(req.userId, req.body);
+        const exercise = await usersRepository.addToExercises(userId, req.body);
         return res.status(201).json(exercise);
     } 
     catch (error: any) {
@@ -69,10 +80,11 @@ export const addFavExercise = async (req: AuthRequest, res: Response, next: Next
 
 export const addFavRoutine = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
-        if(!req.userId){
-            return res.status(401).json({message: "unauthorized"})
+        const userId = req.user?.uid;
+        if(!userId){
+            return res.status(400).send("Unauthorized");
         }
-        const routine = await usersRepository.addToRoutines(req.userId, req.body);
+        const routine = await usersRepository.addToRoutines(userId, req.body);
         return res.status(201).json(routine);
     } 
     catch (error: any) {
@@ -82,10 +94,11 @@ export const addFavRoutine = async (req: AuthRequest, res: Response, next: NextF
 
 export const deleteFavExercise = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
-        if(!req.userId){
-            return res.status(401).json({message: "unauthorized"})
+        const userId = req.user?.uid;
+        if(!userId){
+            return res.status(400).send("Unauthorized");
         }
-        const exercise = await usersRepository.deleteFromExercises(req.userId, req.body);
+        const exercise = await usersRepository.deleteFromExercises(userId, req.body);
         return res.status(201).json(exercise);
     } 
     catch (error: any) {
@@ -95,10 +108,11 @@ export const deleteFavExercise = async (req: AuthRequest, res: Response, next: N
 
 export const deleteFavRoutine = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
-        if(!req.userId){
-            return res.status(401).json({message: "unauthorized"})
+        const userId = req.user?.uid;
+        if(!userId){
+            return res.status(400).send("Unauthorized");
         }
-        const routine = await usersRepository.deleteFromRoutines(req.userId, req.body);
+        const routine = await usersRepository.deleteFromRoutines(userId, req.body);
         return res.status(201).json(routine);
     } 
     catch (error: any) {

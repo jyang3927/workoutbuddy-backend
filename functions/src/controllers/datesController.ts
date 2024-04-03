@@ -1,7 +1,6 @@
 import { Response, NextFunction } from "express";
 import * as datesRepository from "../repository/datesRepository";
 import { AuthRequest } from "../models/AuthRequest";
-import { Auth } from "firebase-admin/auth";
 
 export const getAllDates = async (
   req: AuthRequest,
@@ -9,10 +8,11 @@ export const getAllDates = async (
   next: NextFunction
 ) => {
   try {
-    if (!req.userId) {
-      return res.status(401).json({ message: "unauthorized" });
+    const userId = req.user?.uid;
+    if(!userId){
+        return res.status(400).send("Unauthorized");
     }
-    const results = await datesRepository.findAllDates(req.userId);
+    const results = await datesRepository.findAllDates(userId);
     return res.status(200).json(results);
   } catch (error: any) {
     return next(error);
@@ -25,11 +25,12 @@ export const getAllRoutinesforDate = async (
   next: NextFunction
 ) => {
   try {
-    if (!req.userId) {
-      return res.status(401).json({ message: "unauthorized" });
-    }
+    const userId = req.user?.uid;
+        if(!userId){
+            return res.status(400).send("Unauthorized");
+        }
     const results = await datesRepository.findRoutinesForDate(
-      req.userId,
+      userId,
       req.params.date
     );
     return res.status(200).json(results);
@@ -44,16 +45,17 @@ export const addDateToUser = async (
   next: NextFunction
 ) => {
   try {
-    if (!req.userId) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
+    const userId = req.user?.uid;
+        if(!userId){
+            return res.status(400).send("Unauthorized");
+        }
 
     const { date, routines, workedOut } = req.body;
     if (!date) {
       return res.status(400).json({ message: "Date is required" });
     }
     const newDateDocument = await datesRepository.addDate(
-      req.userId,
+      userId,
       date,
       routines,
       workedOut
