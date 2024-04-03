@@ -6,7 +6,7 @@ export type ExerciseWithoutSet = Omit<Exercise, 'sets'>
 
 export default interface User {
     _id?: ObjectId; 
-    uId: string; 
+    uId?: string; 
     userName: string; 
     favExercises: ExerciseWithoutSet[]; 
     favRoutines: Routines[]; 

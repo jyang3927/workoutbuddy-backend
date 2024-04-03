@@ -1,3 +1,6 @@
+import * as admin from 'firebase-admin';
+admin.initializeApp();
+
 import * as functions from 'firebase-functions'; 
 import express, {ErrorRequestHandler} from 'express'; 
 import cors from 'cors'; 
@@ -15,3 +18,5 @@ const errorHandler:ErrorRequestHandler = (err, req, res, next) => {
 app.use(errorHandler);
 
 app.use("/", usersRouter); 
+
+export const backendAPI = functions.https.onRequest(app)
