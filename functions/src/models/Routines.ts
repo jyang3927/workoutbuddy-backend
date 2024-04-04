@@ -1,6 +1,7 @@
-import Exercise from "./Exercise";
+import mongoose from "mongoose";
 
-export interface Routines{
+export interface Routines {
+    uId: string;
     routineName: string; 
-    exercises: Exercise[]; 
+    exercises: mongoose.Schema.Types.ObjectId[];
 }

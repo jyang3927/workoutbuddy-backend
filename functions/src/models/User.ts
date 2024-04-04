@@ -1,10 +1,10 @@
 import { ObjectId } from "mongodb";
-import Exercise from "./Exercise";
 import { Routines } from "./Routines";
+import { Exercise } from "./Exercise";
 
 export type ExerciseWithoutSet = Omit<Exercise, 'sets'>
 
-export default interface User {
+export interface User {
     _id?: ObjectId; 
     uId?: string; 
     userName: string; 

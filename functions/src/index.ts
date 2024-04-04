@@ -6,10 +6,18 @@ import express, { ErrorRequestHandler } from "express";
 import cors from "cors";
 import usersRouter from "./routes/usersRouter";
 import datesRouter from "./routes/datesRouter";
+import mongoose from "mongoose";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+//connect to the database
+mongoose.connect(functions.config().mongodb.uri)
+   .then(() => console.log("Connected successfully!"))
+   .catch((error:any) => {
+    console.error('Error connecting to MongoDB', error);
+});
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   res.status(500).json({ message: "Internal Server Error" });

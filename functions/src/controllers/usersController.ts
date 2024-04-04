@@ -1,7 +1,7 @@
 import { Response, NextFunction } from "express";
 import * as usersRepository from '../repository/usersRepository'; 
 import { AuthRequest } from "../models/AuthRequest";
-import User from "../models/User";
+import User from "../models/schemas/UserSchema";
 
 //use AuthRequest to make sure user is logged in and authorized 
 export const getUser = async(req: AuthRequest, res: Response, next: NextFunction) => {

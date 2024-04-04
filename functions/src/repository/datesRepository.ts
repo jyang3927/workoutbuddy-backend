@@ -1,97 +1,99 @@
-import { MongoDBConnection } from "../config/MongoDBConnection";
-import { DOCUMENTS } from "../constants/Documents";
-import { Routines } from "../models/Routines";
-import { Date } from "../models/Date";
+import UserActivity from "../models/schemas/UserActivitySchema";
+import mongoose from "mongoose";
 
-export const findAllDates = async (uId: string): Promise<Date[]> => {
-  const client = await MongoDBConnection.getClient();
-  const datesCollection = client.db().collection<Date>(DOCUMENTS.DATE);
-  const dates = await datesCollection.find({ uId: uId }).toArray();
-  return dates;
-};
-export const findDatesByMonth = async (
-  uId: string,
-  month: number,
-  year: number
-): Promise<Date[]> => {
-  const client = await MongoDBConnection.getClient();
-  const collection = client.db().collection<Date>(DOCUMENTS.DATE);
-  // Aggregation pipeline to filter by user ID, month, and year
-  const pipeline = [
-    {
-      $addFields: {
-        // Convert the date string to a date object
-        convertedDate: { $dateFromString: { dateString: "$date" } },
-      },
-    },
-    {
-      $match: {
-        uId: uId, // Filter by user ID
-        // Use MongoDB's date aggregation operators to filter by month and year
-        $expr: {
-          $and: [
-            { $eq: [{ $month: "$convertedDate" }, month] },
-            { $eq: [{ $year: "$convertedDate" }, year] },
-          ],
-        },
-      },
-    },
-  ];
-  const records = (await collection.aggregate(pipeline).toArray()) as Date[];
-  return records;
-};
-export const findRoutinesForDate = async (
-  userId: string,
-  dateStr: string
-): Promise<Routines[]> => {
-  const client = await MongoDBConnection.getClient();
-  const datesCollection = client.db().collection<Date>(DOCUMENTS.DATE);
-  const dateDoc = await datesCollection.findOne({ uId: userId, date: dateStr });
-  return dateDoc?.routines ?? [];
+export const findAllUserActivity = async (uId: string): Promise<Date[]> => {
+  const activities = await UserActivity.find({ uId: uId }).exec();
+  return activities.map(activity => activity.date); 
 };
 
-export const addDate = async (
+export const findDatesByMonth = async (uId: string, month: number, year: number): Promise<Date[]> => {
+  // Construct the start and end dates for the month
+  const startDate = new Date(year, month - 1, 1);
+  const endDate = new Date(year, month, 0);
+
+  // Use Mongoose to find documents within the date range
+  const activities = await UserActivity.find({
+    uId: uId,
+    date: { $gte: startDate, $lt: endDate },
+  }).exec();
+
+  // Assuming 'date' is a field in UserActivity and you want to return an array of dates
+  return activities.map(activity => activity.date);
+};
+
+export const findRoutinesForDate = async (userId: string, dateStr: string): Promise<any[]> => {
+  // Assuming dateStr is in a format compatible with Date construction
+  const date = new Date(dateStr);
+  const startOfDay = new Date(date.setHours(0, 0, 0, 0));
+  const endOfDay = new Date(date.setHours(23, 59, 59, 999));
+
+  const activities = await UserActivity.find({
+    uId: userId,
+    date: { $gte: startOfDay, $lte: endOfDay },
+  }).populate('routines').exec(); // Populate routines assuming they're referenced by ObjectId
+
+  // Assuming you want to return an array of routines from the UserActivity documents
+  return activities.map(activity => activity.routines);
+};
+
+export const addUserActivity = async (
   userId: string,
   dateStr: string,
-  routines: Routines[],
+  routines: mongoose.Schema.Types.ObjectId[],
   workedOut: boolean = false
-): Promise<Date> => {
-  const client = await MongoDBConnection.getClient();
-  const datesCollection = client.db().collection<Date>(DOCUMENTS.DATE);
-  const newDate: Date = {
-    uId: userId,
-    date: dateStr,
-    routines: routines,
-    workedOut: workedOut,
-  };
+): Promise<UserActivity> => {
+  const date = new Date(dateStr); // Ensure dateStr is in a compatible format
+
   try {
-    await datesCollection.insertOne(newDate);
-    return newDate;
-  } catch (error: any) {
-    console.error("Failed to add new date:", error);
-    throw new Error("Failed to add new date.");
+    const newActivity = new UserActivity({
+      uId: userId,
+      date: date,
+      routines: routines,
+      workedOut: workedOut,
+    });
+    await newActivity.save();
+    return newActivity;
+  } catch (error) {
+    console.error("Failed to add new user activity:", error);
+    throw new Error("Failed to add new user activity.");
   }
 };
 
-export const editDate = async (
+export const editUserActivity = async (
   userId: string,
   dateStr: string,
-  updateData: Partial<Date>
+  updateData: Partial<UserActivity>
 ): Promise<void> => {
-  const client = await MongoDBConnection.getClient();
-  const datesCollection = client.db().collection<Date>(DOCUMENTS.DATE);
-  await datesCollection.updateOne(
-    { uId: userId, date: dateStr },
-    { $set: updateData }
-  );
+  const date = new Date(dateStr);
+  const startOfDay = new Date(date.setHours(0, 0, 0, 0));
+  const endOfDay = new Date(date.setHours(23, 59, 59, 999));
+
+  try {
+    await UserActivity.updateOne(
+      { uId: userId, date: { $gte: startOfDay, $lte: endOfDay } },
+      { $set: updateData }
+    ).exec();
+  } catch (error) {
+    console.error("Failed to edit user activity:", error);
+    throw new Error("Failed to edit user activity.");
+  }
 };
 
-export const deleteDate = async (
+export const deleteUserActivity = async (
   userId: string,
   dateStr: string
 ): Promise<void> => {
-  const client = await MongoDBConnection.getClient();
-  const datesCollection = client.db().collection<Date>(DOCUMENTS.DATE);
+  const date = new Date(dateStr);
+  const startOfDay = new Date(date.setHours(0, 0, 0, 0));
+  const endOfDay = new Date(date.setHours(23, 59, 59, 999));
 
-  await datesCollection.deleteOne({ uId: userId, date: dateStr });
+  try {
+    await UserActivity.deleteOne({
+      uId: userId,
+      date: { $gte: startOfDay, $lte: endOfDay },
+    }).exec();
+  } catch (error) {
+    console.error("Failed to delete user activity:", error);
+    throw new Error("Failed to delete user activity.");
+  }
 };

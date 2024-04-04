@@ -18,7 +18,7 @@ datesRouter.get("/dates", firebaseAuthMiddleware, datesController.getAllDates);
 datesRouter.post(
   "/dates/",
   firebaseAuthMiddleware,
-  datesController.addDateToUser
+  datesController.addUserActivity
 );
 
 // //edit date
