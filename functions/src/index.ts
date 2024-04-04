@@ -5,7 +5,7 @@ import * as functions from "firebase-functions";
 import express, { ErrorRequestHandler } from "express";
 import cors from "cors";
 import usersRouter from "./routes/usersRouter";
-import datesRouter from "./routes/datesRouter";
+import userActivityRouter from "./routes/userActivityRouter";
 import mongoose from "mongoose";
 
 const app = express();
@@ -26,6 +26,6 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
 app.use(errorHandler);
 
 app.use("/api", usersRouter);
-app.use("/api", datesRouter);
+app.use("/api", userActivityRouter);
 
 export const backendAPI = functions.https.onRequest(app);

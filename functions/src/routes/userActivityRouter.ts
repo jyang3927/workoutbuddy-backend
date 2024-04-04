@@ -1,11 +1,11 @@
 import express from "express";
-import * as datesController from "../controllers/datesController";
+import * as datesController from "../controllers/userActivityController";
 import { firebaseAuthMiddleware } from "../middleware/firebaseAuthMiddleware";
 
-const datesRouter = express.Router();
+const userActivityRouter = express.Router();
 
 //Get all dates for each user
-datesRouter.get("/dates", firebaseAuthMiddleware, datesController.getAllDates);
+userActivityRouter.get("/dates", firebaseAuthMiddleware, datesController.getAllDates);
 
 // Get all routines for date
 // datesRouter.get(
@@ -15,24 +15,24 @@ datesRouter.get("/dates", firebaseAuthMiddleware, datesController.getAllDates);
 // );
 
 // //creating new date
-datesRouter.post(
+userActivityRouter.post(
   "/dates/",
   firebaseAuthMiddleware,
   datesController.addUserActivity
 );
 
 // //edit date
-datesRouter.patch(
+userActivityRouter.patch(
   "/dates/:id",
   firebaseAuthMiddleware,
   datesController.editDate
 );
 
 // //delete date
-datesRouter.delete(
+userActivityRouter.delete(
   "/dates/:id",
   firebaseAuthMiddleware,
   datesController.deleteDate
 );
 
-export default datesRouter;
+export default userActivityRouter;
