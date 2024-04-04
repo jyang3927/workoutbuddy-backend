@@ -2,6 +2,8 @@ import express from "express";
 import * as datesController from "../controllers/datesController";
 import { firebaseAuthMiddleware } from "../middleware/firebaseAuthMiddleware";
 
+      // "uri": "mongodb+srv://fawazbutt95:reF4POXeCW6vbNjF@cluster0.vimjg68.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+
 const datesRouter = express.Router();
 
 //Get all dates for each user

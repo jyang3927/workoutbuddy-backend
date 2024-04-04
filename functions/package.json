@@ -15,12 +15,14 @@
   },
   "main": "lib/index.js",
   "dependencies": {
+    "@types/mongoose": "^5.11.97",
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "express-validator": "^7.0.1",
     "firebase-admin": "^11.11.1",
     "firebase-functions": "^4.8.1",
-    "mongodb": "^6.5.0"
+    "mongodb": "^6.5.0",
+    "mongoose": "^8.2.4"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
