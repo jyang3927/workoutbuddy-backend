@@ -1,5 +1,5 @@
 import { Response, NextFunction } from "express";
-import * as datesRepository from "../repository/datesRepository";
+import * as datesRepository from "../repository/userActivityRepository";
 import { AuthRequest } from "../models/AuthRequest";
 
 export const getAllDates = async (
