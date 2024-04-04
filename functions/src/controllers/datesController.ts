@@ -18,7 +18,7 @@ export const getAllDates = async (
     if (month && year) {
       results = await datesRepository.findDatesByMonth(userId, month, year);
     } else {
-      results = await datesRepository.findAllDates(userId);
+      results = await datesRepository.findAllUserActivity(userId);
     }
     return res.status(200).json(results);
   } catch (error: any) {
@@ -46,7 +46,7 @@ export const getAllRoutinesforDate = async (
   }
 };
 
-export const addDateToUser = async (
+export const addUserActivity = async (
   req: AuthRequest,
   res: Response,
   next: NextFunction
@@ -61,7 +61,7 @@ export const addDateToUser = async (
     if (!date) {
       return res.status(400).json({ message: "Date is required" });
     }
-    const newDateDocument = await datesRepository.addDate(
+    const newDateDocument = await datesRepository.addUserActivity(
       userId,
       date,
       routines,
@@ -91,7 +91,7 @@ export const editDate = async (
         .status(400)
         .json({ message: "Missing userId or date in request." });
     }
-    await datesRepository.editDate(userId, date, updateData);
+    await datesRepository.editUserActivity(userId, date, updateData);
     return res.status(200).json({ message: "Date updated successfully." });
   } catch (error: any) {
     console.error("Error updating date:", error);
@@ -113,7 +113,7 @@ export const deleteDate = async (
         .json({ message: "Missing userId or date in request." });
     }
 
-    await datesRepository.deleteDate(userId, date);
+    await datesRepository.deleteUserActivity(userId, date);
 
     return res.status(200).json({ message: "Date deleted successfully." });
   } catch (error: any) {

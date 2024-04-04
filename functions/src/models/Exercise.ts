@@ -1,8 +1,9 @@
-import { Set } from "./Set";
+import mongoose from "mongoose";
 
-export default interface Exercise {
+export interface Exercise {
+    uId: string;
     name: string;
     type: string; 
     muscle: string; 
-    sets: Set[]; 
-}
+    sets: mongoose.Schema.Types.ObjectId[];
+  }
