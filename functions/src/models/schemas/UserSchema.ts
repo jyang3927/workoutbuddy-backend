@@ -15,6 +15,6 @@ const userSchema = new Schema({
   favRoutines: [{ type: Schema.Types.ObjectId, ref: 'Routine' }], // References Routines collection
 });
 
-const User = mongoose.model<User>('User', userSchema);
+const User = mongoose.model<User>('users', userSchema);
 
 export default User;
