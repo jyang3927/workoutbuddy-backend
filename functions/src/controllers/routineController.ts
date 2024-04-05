@@ -38,8 +38,12 @@ export const addRoutine = async (
       return res.status(400).send("Unauthorized");
     }
     const newRoutine = req.body as Routines;
+    const { userActivityID } = req.params;
     newRoutine.uId = userId;
-    const result = await routineRepository.insertRoutine(newRoutine);
+    const result = await routineRepository.insertRoutine(
+      newRoutine,
+      userActivityID
+    );
     return res.status(201).json(result);
   } catch (error: any) {
     return next(error);
