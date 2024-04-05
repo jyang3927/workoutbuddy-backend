@@ -3,10 +3,14 @@ import mongoose from "mongoose";
 
 export const findAllUserActivity = async (uId: string): Promise<Date[]> => {
   const activities = await UserActivity.find({ uId: uId }).exec();
-  return activities.map(activity => activity.date); 
+  return activities.map((activity) => activity.date);
 };
 
-export const findDatesByMonth = async (uId: string, month: number, year: number): Promise<Date[]> => {
+export const findDatesByMonth = async (
+  uId: string,
+  month: number,
+  year: number
+): Promise<Date[]> => {
   // Construct the start and end dates for the month
   const startDate = new Date(year, month - 1, 1);
   const endDate = new Date(year, month, 0);
@@ -18,10 +22,13 @@ export const findDatesByMonth = async (uId: string, month: number, year: number)
   }).exec();
 
   // Assuming 'date' is a field in UserActivity and you want to return an array of dates
-  return activities.map(activity => activity.date);
+  return activities.map((activity) => activity.date);
 };
 
-export const findRoutinesForDate = async (userId: string, dateStr: string): Promise<any[]> => {
+export const findUserActivityByDate = async (
+  userId: string,
+  dateStr: string
+): Promise<any[]> => {
   // Assuming dateStr is in a format compatible with Date construction
   const date = new Date(dateStr);
   const startOfDay = new Date(date.setHours(0, 0, 0, 0));
@@ -30,10 +37,13 @@ export const findRoutinesForDate = async (userId: string, dateStr: string): Prom
   const activities = await UserActivity.find({
     uId: userId,
     date: { $gte: startOfDay, $lte: endOfDay },
-  }).populate('routines').exec(); // Populate routines assuming they're referenced by ObjectId
+  })
+    .populate("routines")
+    .populate("exercises")
+    .exec(); // Populate routines assuming they're referenced by ObjectId
 
   // Assuming you want to return an array of routines from the UserActivity documents
-  return activities.map(activity => activity.routines);
+  return activities;
 };
 
 export const addUserActivity = async (
