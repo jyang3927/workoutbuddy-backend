@@ -1,8 +1,12 @@
 import { Response, NextFunction } from "express";
 <<<<<<< HEAD
+import * as userActivityRepository from "../repository/userActivityRepository";
+=======
+<<<<<<< HEAD
 import * as datesRepository from "../repository/userActivityRepository"
 =======
 import * as datesRepository from "../repository/userActivityRepository";
+>>>>>>> main
 >>>>>>> main
 import { AuthRequest } from "../models/AuthRequest";
 
@@ -20,9 +24,13 @@ export const getAllDates = async (
     const year = req.query.year ? parseInt(req.query.year as string) : null;
     let results;
     if (month && year) {
-      results = await datesRepository.findDatesByMonth(userId, month, year);
+      results = await userActivityRepository.findDatesByMonth(
+        userId,
+        month,
+        year
+      );
     } else {
-      results = await datesRepository.findAllUserActivity(userId);
+      results = await userActivityRepository.findAllUserActivity(userId);
     }
     return res.status(200).json(results);
   } catch (error: any) {
@@ -40,7 +48,7 @@ export const getAllRoutinesforDate = async (
     if (!userId) {
       return res.status(400).send("Unauthorized");
     }
-    const results = await datesRepository.findRoutinesForDate(
+    const results = await userActivityRepository.findRoutinesForDate(
       userId,
       req.params.date
     );
@@ -65,7 +73,7 @@ export const addUserActivity = async (
     if (!date) {
       return res.status(400).json({ message: "Date is required" });
     }
-    const newDateDocument = await datesRepository.addUserActivity(
+    const newDateDocument = await userActivityRepository.addUserActivity(
       userId,
       date,
       routines,
@@ -89,7 +97,7 @@ export const editDate = async (req: AuthRequest, res: Response, next: NextFuncti
     if (!userId || !date) {
       return res.status(400).json({ message: "Missing userId or date in request." });
     }
-    await datesRepository.editUserActivity(userId, date, updateData);
+    await userActivityRepository.editUserActivity(userId, date, updateData);
     return res.status(200).json({ message: "Date updated successfully." });
   } catch (error: any) {
     console.error("Error updating date:", error);
@@ -111,7 +119,7 @@ export const deleteDate = async (
         .json({ message: "Missing userId or date in request." });
     }
 
-    await datesRepository.deleteUserActivity(userId, date);
+    await userActivityRepository.deleteUserActivity(userId, date);
 
     return res.status(200).json({ message: "Date deleted successfully." });
   } catch (error: any) {
