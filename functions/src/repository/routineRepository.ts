@@ -1,6 +1,7 @@
 import RoutineSchema from "../models/schemas/RoutineSchema";
 import { Routines } from "../models/Routines";
 import mongoose from "mongoose";
+import UserActivity from "../models/schemas/UserActivitySchema";
 interface UpdateRoutineInput {
   routineName?: string;
   exercises?: mongoose.Types.ObjectId[];
@@ -13,8 +14,19 @@ export const findRoutineById = async (
 };
 
 // Insert a new routine into the database
-export const insertRoutine = async (routine: Routines): Promise<Routines> => {
-  return await RoutineSchema.create(routine);
+export const insertRoutine = async (
+  routine: Routines,
+  userActivityID: string
+): Promise<Routines> => {
+  const newRoutine = await RoutineSchema.create(routine);
+  await UserActivity.findByIdAndUpdate(
+    userActivityID,
+    {
+      $push: { routines: newRoutine._id },
+    },
+    { new: true }
+  );
+  return newRoutine;
 };
 
 //find All exercises in routine

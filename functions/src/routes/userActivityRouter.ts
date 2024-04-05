@@ -6,7 +6,7 @@ const userActivityRouter = express.Router();
 
 //Get all dates for each user
 userActivityRouter.get(
-  "/dates",
+  "/userActivity",
   firebaseAuthMiddleware,
   datesController.getAllDates
 );

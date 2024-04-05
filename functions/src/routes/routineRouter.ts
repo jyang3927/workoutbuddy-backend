@@ -11,7 +11,11 @@ router.get(
   routineController.getRoutine
 );
 // Create new routine
-router.post("/Routines", firebaseAuthMiddleware, routineController.addRoutine);
+router.post(
+  "/Routines/:userActivityID",
+  firebaseAuthMiddleware,
+  routineController.addRoutine
+);
 // Update existing routine
 router.put(
   "/Routines/:routineId",
