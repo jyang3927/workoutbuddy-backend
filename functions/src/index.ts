@@ -6,7 +6,9 @@ import express, { ErrorRequestHandler } from "express";
 import cors from "cors";
 import usersRouter from "./routes/usersRouter";
 import userActivityRouter from "./routes/userActivityRouter";
+import setRouter from "./routes/setRouter";
 import mongoose from "mongoose";
+import exerciseRouter from "./routes/exerciseRouter";
 import routineRouter from "./routes/routineRouter";
 
 const app = express();
@@ -29,6 +31,8 @@ app.use(errorHandler);
 
 app.use("/api", usersRouter);
 app.use("/api", userActivityRouter);
+app.use("/api", setRouter);
+app.use("/api", exerciseRouter);
 app.use("/api", routineRouter);
 
 export const backendAPI = functions.https.onRequest(app);

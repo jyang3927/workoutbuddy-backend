@@ -1,5 +1,13 @@
 import { Response, NextFunction } from "express";
+<<<<<<< HEAD
 import * as userActivityRepository from "../repository/userActivityRepository";
+=======
+<<<<<<< HEAD
+import * as datesRepository from "../repository/userActivityRepository"
+=======
+import * as datesRepository from "../repository/userActivityRepository";
+>>>>>>> main
+>>>>>>> main
 import { AuthRequest } from "../models/AuthRequest";
 
 export const getAllDates = async (
@@ -82,18 +90,12 @@ export const addUserActivity = async (
   }
 };
 
-export const editDate = async (
-  req: AuthRequest,
-  res: Response,
-  next: NextFunction
-) => {
+export const editDate = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { userId, date } = req.params;
     const updateData = req.body;
     if (!userId || !date) {
-      return res
-        .status(400)
-        .json({ message: "Missing userId or date in request." });
+      return res.status(400).json({ message: "Missing userId or date in request." });
     }
     await userActivityRepository.editUserActivity(userId, date, updateData);
     return res.status(200).json({ message: "Date updated successfully." });
