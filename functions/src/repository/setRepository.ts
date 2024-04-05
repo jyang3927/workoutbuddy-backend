@@ -21,3 +21,12 @@ export const editSetbyId = async(id:string, set:Partial<SetSchema>): Promise<voi
         throw new Error("Failed to edit set.");
       }
 }
+
+export const deleteSetbyId = async(id: string): Promise<void> => {
+    try{
+        await SetSchema.deleteOne({_id: new ObjectId(id)}).exec(); 
+    }catch(error){
+        console.error("Failed to delete set:", error); 
+        throw new Error("Failed to delete set")
+    }
+}

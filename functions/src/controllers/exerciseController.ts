@@ -9,13 +9,28 @@ export const getExercise = async(req: AuthRequest, res: Response, next: NextFunc
         if(!userId){
             return res.status(400).send("Unauthorized");
         }
-        const results = await exerciseRepository.findExerciseById(userId); 
+        const exerciseId = req.params.exerciseId;
+        const results = await exerciseRepository.findExerciseById(exerciseId); 
         return res.status(200).json(results); 
     }
     catch(error: any){
         return next(error); 
     }
 }
+
+// export const getFavoriteExercises = async(req: AuthRequest, res: Response, next: NextFunction) => {
+//     try{
+//         const userId = req.user?.uid;
+//         if(!userId){
+//             return res.status(400).send("Unauthorized");
+//         }
+//         const results = await exerciseRepository.findFavoriteExercises(userId); 
+//         return res.status(200).json(results)
+//     }
+//     catch(error: any){
+//         return next(error); 
+//     }
+// }
 
 export const addExercise = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
@@ -36,10 +51,11 @@ export const addExercise = async (req: AuthRequest, res: Response, next: NextFun
 export const removeExercise = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try{
         const userId = req.user?.uid;
+        const exerciseId = req.params.exerciseId;
         if(!userId){
             return res.status(400).send("Unauthorized");
         }
-    await exerciseRepository.removeExerciseData(userId)
+    await exerciseRepository.removeExerciseData(exerciseId)
     }
     catch (error: any) {
         return next(error);
@@ -61,17 +77,17 @@ export const editExercise = async (req: AuthRequest, res: Response, next: NextFu
     }
 }
 
-export const getSets = async (req: AuthRequest, res: Response, next: NextFunction) => {
-    try {
-        const userId = req.user?.uid;
-        if(!userId){
-            return res.status(400).send("Unauthorized");
-        }
-        let result = await exerciseRepository.findAllSets(userId)
-        return res.status(200).json(result)
-    }
-    catch(error:any) {
-        console.error("Error updating date:", error);
-        return next(error);
-    }
-}
+// export const getSets = async (req: AuthRequest, res: Response, next: NextFunction) => {
+//     try {
+//         const userId = req.user?.uid;
+//         if(!userId){
+//             return res.status(400).send("Unauthorized");
+//         }
+//         let result = await exerciseRepository.findAllSets(userId)
+//         return res.status(200).json(result)
+//     }
+//     catch(error:any) {
+//         console.error("Error updating date:", error);
+//         return next(error);
+//     }
+// }

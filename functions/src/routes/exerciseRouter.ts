@@ -4,14 +4,16 @@ import { firebaseAuthMiddleware } from "../middleware/firebaseAuthMiddleware";
 
 const exerciseRouter = express.Router()
 
-exerciseRouter.get("/exercises", firebaseAuthMiddleware, exerciseController.getExercise)
+exerciseRouter.get("/exercises/:exerciseId", firebaseAuthMiddleware, exerciseController.getExercise)
+
+// exerciseRouter.get("/exercises/favorite", firebaseAuthMiddleware, exerciseController.getFavoriteExercises); 
 
 exerciseRouter.post("/exercises", firebaseAuthMiddleware, exerciseController.addExercise)
 
 exerciseRouter.put("/exercises/:id", firebaseAuthMiddleware, exerciseController.editExercise)
 
-exerciseRouter.delete("/exercises/:id", firebaseAuthMiddleware,exerciseController.removeExercise)
+exerciseRouter.delete("/exercises/:exerciseId", firebaseAuthMiddleware,exerciseController.removeExercise)
 
-exerciseRouter.get("/exercises/:id/sets", firebaseAuthMiddleware,exerciseController.getSets)
+// exerciseRouter.get("/exercises/:id/sets", firebaseAuthMiddleware,exerciseController.getSets)
 
 export default exerciseRouter

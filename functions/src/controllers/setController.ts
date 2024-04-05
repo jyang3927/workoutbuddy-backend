@@ -48,3 +48,18 @@ export const editSet = async(req:AuthRequest, res:Response, next:NextFunction) =
         return next(error);
     }
 }
+
+export const deleteSet = async(req:AuthRequest, res:Response, next:NextFunction) => {
+    try{
+        const userId = req.user?.uid;
+        if(!userId){
+            return res.status(400).send("Unauthorized");
+        }  
+        const id = req.params.setId;
+        await setRepository.deleteSetbyId(id); 
+        return res.status(200).json({message:"Delete Successful"})
+    }catch(error:any){
+        console.error("Error editing set", error); 
+        return next(error);
+    }
+}
