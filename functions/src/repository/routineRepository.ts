@@ -2,6 +2,8 @@ import RoutineSchema from "../models/schemas/RoutineSchema";
 import { Routines } from "../models/Routines";
 import mongoose from "mongoose";
 import UserActivity from "../models/schemas/UserActivitySchema";
+
+
 interface UpdateRoutineInput {
   routineName?: string;
   exercises?: mongoose.Types.ObjectId[];
