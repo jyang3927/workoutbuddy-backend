@@ -8,6 +8,7 @@ import usersRouter from "./routes/usersRouter";
 import userActivityRouter from "./routes/userActivityRouter";
 import setRouter from './routes/setRouter'; 
 import mongoose from "mongoose";
+import exerciseRouter from "./routes/exerciseRouter";
 
 const app = express();
 app.use(cors());
@@ -29,5 +30,6 @@ app.use(errorHandler);
 app.use("/api", usersRouter);
 app.use("/api", userActivityRouter);
 app.use("/api", setRouter); 
+app.use("/api", exerciseRouter)
 
 export const backendAPI = functions.https.onRequest(app);
