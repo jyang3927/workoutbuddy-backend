@@ -6,25 +6,25 @@ import { firebaseAuthMiddleware } from "../middleware/firebaseAuthMiddleware";
 const router = express.Router();
 // Get single routine by ID
 router.get(
-  "/Routines/:routineId",
+  "/routines/:routineId",
   firebaseAuthMiddleware,
   routineController.getRoutine
 );
 // Create new routine
 router.post(
-  "/Routines/:userActivityID",
+  "/routines/:userActivityID",
   firebaseAuthMiddleware,
   routineController.addRoutine
 );
 // Update existing routine
 router.put(
-  "/Routines/:routineId",
+  "/routines/:routineId",
   firebaseAuthMiddleware,
   routineController.updateRoutine
 );
 // Delete routine
 router.delete(
-  "/Routines/:routineId",
+  "/routines/:routineId",
   firebaseAuthMiddleware,
   routineController.deleteRoutine
 );

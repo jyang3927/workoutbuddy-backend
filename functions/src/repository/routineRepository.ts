@@ -40,7 +40,7 @@ export const findAllExercisesInRoutine = async (
   }
 
   const routine = await RoutineSchema.findById(routineId)
-    .populate("exercises")
+    .populate("exercises") 
     .exec();
 
   if (!routine) {

@@ -18,20 +18,6 @@ export const getExercise = async(req: AuthRequest, res: Response, next: NextFunc
     }
 }
 
-// export const getFavoriteExercises = async(req: AuthRequest, res: Response, next: NextFunction) => {
-//     try{
-//         const userId = req.user?.uid;
-//         if(!userId){
-//             return res.status(400).send("Unauthorized");
-//         }
-//         const results = await exerciseRepository.findFavoriteExercises(userId); 
-//         return res.status(200).json(results)
-//     }
-//     catch(error: any){
-//         return next(error); 
-//     }
-// }
-
 export const addExercise = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
         const userId = req.user?.uid;
@@ -68,7 +54,9 @@ export const editExercise = async (req: AuthRequest, res: Response, next: NextFu
         if(!userId){
             return res.status(400).send("Unauthorized");
         }
-        await exerciseRepository.editExerciseData(userId, req.body);
+        const exerciseId = req.params.exerciseId;
+        const exerciseUpdate = req.body; 
+        await exerciseRepository.editExerciseData(exerciseId, exerciseUpdate);
         return res.status(200).json({ message: "Date updated successfully." })
     }
     catch (error:any){
@@ -77,6 +65,37 @@ export const editExercise = async (req: AuthRequest, res: Response, next: NextFu
     }
 }
 
+export const addSetToExercise = async (req: AuthRequest, res: Response, next: NextFunction) => {
+    try{
+        const userId = req.user?.uid; 
+        if(!userId){
+            return res.status(400).send("Unauthorized"); 
+        }
+        const exerciseId = req.params.exerciseId; 
+        const addSet = req.params.setId; 
+        await exerciseRepository.addSetById(exerciseId, addSet); 
+        return res.status(200).json({message: "Exercise Sets Updated Successfully"}); 
+    }catch (error:any){
+        console.error("Error updating date:", error);
+        return next(error);
+    }
+}
+
+export const deleteSetToExercise = async(req:AuthRequest, res:Response, next:NextFunction) => {
+    try{
+        const userId = req.user?.uid; 
+        if(!userId){
+            return res.status(400).send("Unauthorized"); 
+        }
+        const exerciseId = req.params.exerciseId;
+        const deleteSet = req.params.setId; 
+        await exerciseRepository.deleteSetById(exerciseId, deleteSet); 
+        return res.status(200).json({message: "Exercise Sets Updated Successfully"}); 
+    }catch (error:any){
+        console.error("Error updating date:", error);
+        return next(error);
+    }
+}
 // export const getSets = async (req: AuthRequest, res: Response, next: NextFunction) => {
 //     try {
 //         const userId = req.user?.uid;
@@ -89,5 +108,19 @@ export const editExercise = async (req: AuthRequest, res: Response, next: NextFu
 //     catch(error:any) {
 //         console.error("Error updating date:", error);
 //         return next(error);
+//     }
+// }
+
+// export const getFavoriteExercises = async(req: AuthRequest, res: Response, next: NextFunction) => {
+//     try{
+//         const userId = req.user?.uid;
+//         if(!userId){
+//             return res.status(400).send("Unauthorized");
+//         }
+//         const results = await exerciseRepository.findFavoriteExercises(userId); 
+//         return res.status(200).json(results)
+//     }
+//     catch(error: any){
+//         return next(error); 
 //     }
 // }

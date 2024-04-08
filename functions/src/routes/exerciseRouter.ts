@@ -6,13 +6,17 @@ const exerciseRouter = express.Router()
 
 exerciseRouter.get("/exercises/:exerciseId", firebaseAuthMiddleware, exerciseController.getExercise)
 
-// exerciseRouter.get("/exercises/favorite", firebaseAuthMiddleware, exerciseController.getFavoriteExercises); 
-
 exerciseRouter.post("/exercises", firebaseAuthMiddleware, exerciseController.addExercise)
 
-exerciseRouter.put("/exercises/:id", firebaseAuthMiddleware, exerciseController.editExercise)
+exerciseRouter.put("/exercises/:exerciseId", firebaseAuthMiddleware, exerciseController.editExercise)
 
 exerciseRouter.delete("/exercises/:exerciseId", firebaseAuthMiddleware,exerciseController.removeExercise)
+
+exerciseRouter.put("/exercises/:exerciseId/sets/:setId", firebaseAuthMiddleware, exerciseController.addSetToExercise)
+
+exerciseRouter.put("/exercises/:exerciseId/sets/delete/:setId", firebaseAuthMiddleware, exerciseController.deleteSetToExercise);
+
+// exerciseRouter.get("/exercises/favorite", firebaseAuthMiddleware, exerciseController.getFavoriteExercises); 
 
 // exerciseRouter.get("/exercises/:id/sets", firebaseAuthMiddleware,exerciseController.getSets)
 
