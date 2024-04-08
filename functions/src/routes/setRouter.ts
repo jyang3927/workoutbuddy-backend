@@ -13,4 +13,6 @@ setRouter.put("/sets/:setId", firebaseAuthMiddleware, setController.editSet);
 
 setRouter.delete("/sets/:setId", firebaseAuthMiddleware, setController.deleteSet)
 
+//add set to Set and Exercise collection together 
+setRouter.post("/sets/:exerciseId", firebaseAuthMiddleware, setController.addSetExercise);
 export default setRouter;

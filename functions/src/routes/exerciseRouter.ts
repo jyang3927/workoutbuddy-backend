@@ -16,6 +16,9 @@ exerciseRouter.put("/exercises/:exerciseId/sets/:setId", firebaseAuthMiddleware,
 
 exerciseRouter.put("/exercises/:exerciseId/sets/delete/:setId", firebaseAuthMiddleware, exerciseController.deleteSetToExercise);
 
+//create new exercise and add to specific routine 
+exerciseRouter.post("/exercises/:routineId", firebaseAuthMiddleware, exerciseController.addExerciseToRoutine)
+
 // exerciseRouter.get("/exercises/favorite", firebaseAuthMiddleware, exerciseController.getFavoriteExercises); 
 
 // exerciseRouter.get("/exercises/:id/sets", firebaseAuthMiddleware,exerciseController.getSets)

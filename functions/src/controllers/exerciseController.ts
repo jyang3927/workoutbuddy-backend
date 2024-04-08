@@ -96,6 +96,35 @@ export const deleteSetToExercise = async(req:AuthRequest, res:Response, next:Nex
         return next(error);
     }
 }
+
+//add new Exercise to specific Routine 
+export const addExerciseToRoutine = async(req: AuthRequest, res: Response, next: NextFunction) => {
+    try{
+        const userId = req.user?.uid; 
+        if(!userId){
+            return res.status(400).send("Unauthorized"); 
+        }
+        const newExercise = req.body as Exercise; 
+        const {routineId} = req.params; 
+        newExercise.uId = userId; 
+        const result = await exerciseRepository.insertExercise(
+            newExercise, routineId
+        );
+        return res.status(201).json(result); 
+    }catch(error:any){
+        return next(error)
+    }
+}
+
+//delete exercise from Routine 
+// export const deleteExerciseFromRoutine = async(req: AuthRequest)
+
+
+
+
+
+
+
 // export const getSets = async (req: AuthRequest, res: Response, next: NextFunction) => {
 //     try {
 //         const userId = req.user?.uid;

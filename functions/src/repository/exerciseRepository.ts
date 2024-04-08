@@ -2,6 +2,7 @@
 import { Exercise } from "../models/Exercise";
 import ExerciseSchema from "../models/schemas/ExerciseSchema";
 import { ObjectId } from "mongodb";
+import RoutineSchema from "../models/schemas/RoutineSchema";
 
 
 export const findExerciseById = async (exerciseId: string): Promise<Exercise | null> => {
@@ -50,12 +51,40 @@ export const deleteSetById = async(exerciseId:string, deleteSet: string): Promis
 }
 
 
+//Insert new exercise into routine? -- router would be /exercises/:routineId
+export const insertExercise = async(
+    exercise: Exercise, 
+    routineId: string
+): Promise<Exercise> => {
+    const newExercise = await ExerciseSchema.create(exercise); 
+    await RoutineSchema.findByIdAndUpdate(
+        routineId,{
+            $push: {exercises: newExercise._id},
+        },
+        {
+            new:true
+        }
+    ); 
+    return newExercise; 
+}
 
-// export const findAllSets = async (exerciseId: string): Promise<mongoose.Schema.Types.ObjectId[] | null> => {
-//     const user = await ExerciseSchema.findOne({ uId: uId }).exec();
-//     return user?.sets ?? null;
-// };
-
-// export const findFavoriteExercises = async(userId: string): Promise<Exercise[] | null> => {
-//     return await ExerciseSchema.find({uId: userId, favoriteExercise: true}).exec(); 
+//delete exercise from routine -- router would be exercises/:routineId
+// export const deleteExerciseInRoutine = async(
+//     exerciseId: string, 
+//     routineId: string
+// )
+// : Promise<void> => {
+//     try{
+//         await RoutineSchema.findByIdAndDelete(routineId, {$pull: {exercises: new ObjectId(exerciseId)}}).exec(); 
+//     }
+//     catch (error) {
+//         throw new Error("Failed to edit user activity.");
+//     }
+    
 // }
+
+
+
+
+
+
