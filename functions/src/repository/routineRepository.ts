@@ -2,6 +2,8 @@ import RoutineSchema from "../models/schemas/RoutineSchema";
 import { Routines } from "../models/Routines";
 import mongoose from "mongoose";
 import UserActivity from "../models/schemas/UserActivitySchema";
+
+
 interface UpdateRoutineInput {
   routineName?: string;
   exercises?: mongoose.Types.ObjectId[];
@@ -38,7 +40,7 @@ export const findAllExercisesInRoutine = async (
   }
 
   const routine = await RoutineSchema.findById(routineId)
-    .populate("exercises")
+    .populate("exercises") 
     .exec();
 
   if (!routine) {
