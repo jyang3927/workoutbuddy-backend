@@ -1,6 +1,7 @@
 import { UserActivity } from "../models/UserActivity";
 import UserActivitySchema from "../models/schemas/UserActivitySchema";
 import mongoose from "mongoose";
+import { ObjectId } from "mongodb";
 
 export const findAllUserActivity = async (
   uId: string
@@ -92,20 +93,12 @@ export const editUserActivity = async (
   }
 };
 
-export const deleteUserActivity = async (
-  userId: string,
-  dateStr: string
-): Promise<void> => {
-  const date = new Date(dateStr);
-  const startOfDay = new Date(date.setHours(0, 0, 0, 0));
-  const endOfDay = new Date(date.setHours(23, 59, 59, 999));
-
+export const deleteUserActivity = async (_id: string): Promise<void> => {
   try {
     await UserActivitySchema.deleteOne({
-      uId: userId,
-      date: { $gte: startOfDay, $lte: endOfDay },
+      _id: new ObjectId(_id),
     }).exec();
-  } catch (error) {
+  } catch (error: any) {
     console.error("Failed to delete user activity:", error);
     throw new Error("Failed to delete user activity.");
   }

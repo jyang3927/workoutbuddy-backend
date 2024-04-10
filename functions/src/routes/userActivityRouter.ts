@@ -13,7 +13,7 @@ userActivityRouter.get(
 
 // //creating new date
 userActivityRouter.post(
-  "/userActivity/",
+  "/userActivity",
   firebaseAuthMiddleware,
   datesController.addUserActivity
 );

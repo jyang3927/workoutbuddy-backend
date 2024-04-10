@@ -95,15 +95,15 @@ export const deleteDate = async (
   next: NextFunction
 ) => {
   try {
-    const { userId, date } = req.params;
+    const { _id } = req.params;
 
-    if (!userId || !date) {
-      return res
-        .status(400)
-        .json({ message: "Missing userId or date in request." });
+    if (!_id) {
+      return res.status(400).json({
+        message: "Missing userId or date in request.(deleteDate function)",
+      });
     }
 
-    await userActivityRepository.deleteUserActivity(userId, date);
+    await userActivityRepository.deleteUserActivity(_id);
 
     return res.status(200).json({ message: "Date deleted successfully." });
   } catch (error: any) {
