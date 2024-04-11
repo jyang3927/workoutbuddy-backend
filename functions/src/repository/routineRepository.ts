@@ -2,6 +2,7 @@ import RoutineSchema from "../models/schemas/RoutineSchema";
 import { Routines } from "../models/Routines";
 import mongoose from "mongoose";
 import UserActivity from "../models/schemas/UserActivitySchema";
+import { ObjectId } from "mongodb";
 
 
 interface UpdateRoutineInput {
@@ -12,7 +13,8 @@ interface UpdateRoutineInput {
 export const findRoutineById = async (
   routineId: string
 ): Promise<Routines | null> => {
-  return await RoutineSchema.findById(routineId).exec();
+  return await RoutineSchema.findOne({_id: new ObjectId(routineId)}).populate("exercises").exec();
+  
 };
 
 // Insert a new routine into the database
