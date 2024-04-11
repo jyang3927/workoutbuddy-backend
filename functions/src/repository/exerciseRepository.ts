@@ -6,7 +6,7 @@ import RoutineSchema from "../models/schemas/RoutineSchema";
 
 
 export const findExerciseById = async (exerciseId: string): Promise<Exercise | null> => {
-    return await ExerciseSchema.findOne({ _id: new ObjectId(exerciseId) }).exec();
+    return await ExerciseSchema.findOne({ _id: new ObjectId(exerciseId) }).populate("sets").exec();
 };
 
 export const addExerciseData = async (exercise: Exercise): Promise<Exercise> => {

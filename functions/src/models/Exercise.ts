@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 export interface Exercise {
-    uId?: string;
+    uId: string;
     name: string;
     type: string; 
     muscle: string; 

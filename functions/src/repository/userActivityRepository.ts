@@ -22,7 +22,7 @@ export const findDatesByMonth = async (
   const activities = await UserActivitySchema.find({
     uId: uId,
     date: { $gte: startDate, $lt: endDate },
-  }).exec();
+  }).populate("routines").exec();
 
   // Assuming 'date' is a field in UserActivity and you want to return an array of dates
   return activities;
@@ -56,7 +56,6 @@ export const addUserActivity = async (
   workedOut: boolean = false
 ): Promise<UserActivity> => {
   const date = new Date(dateStr); // Ensure dateStr is in a compatible format
-
   try {
     const newActivity = new UserActivitySchema({
       uId: userId,
